@@ -81,6 +81,14 @@ function App() {
     } // TODO: Check if game is over
   }
 
+  // Para resetear un juego, un formulario, o algo concreto en la página 
+  // Lo que debemos hacer es devolver los estados a su estado original (state que empezaron)
+  const resetGame = () => {
+    setBoard(Array(9).fill(null))
+    setTurn(TURNS.X)
+    setWinner(null)
+  }
+
   // Lo que se renderiza
   return (
     <>
@@ -120,7 +128,7 @@ function App() {
                   {winner && <Square>{winner}</Square>}
                 </header>
                 <footer>
-                  <button>Emprezar de nuevo</button>
+                  <button onClick={resetGame}>Emprezar de nuevo</button>
                 </footer>
               </div>
             </section>
