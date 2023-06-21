@@ -2,36 +2,11 @@ import { useState } from 'react'
 import './App.css'
 import confetti from 'canvas-confetti'
 
-// Constantes para identificar los turnos. 
-const TURNS = {
-  X: 'x',
-  O: 'o'
-}
+import { Square } from './components/Square.jsx'
+import { WinnerModal } from './components/WinnerModal.jsx'
 
-// El cuadrado del tablero
-const Square = ({ children, isSelected, updateBoard, index }) => {
-  const className = `square ${isSelected ? 'is-selected' : ''}`
-  const handleClick = () => {
-    updateBoard(index)
-  }
-  return (
-    <div className={className} onClick={handleClick}>
-      {children}
-    </div>
-  )
-}
-
-// Definir combinaciones ganadoras como consantes [No es la más optima, pero si la más fácil]
-const WINNER_COMBOS = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6]
-]
+import { TURNS } from './constants/app'
+import { checkWinnerFrom, checkEndGame } from './utils/board'
 
 function App() {
   // Estado para inicializar nuestro tablero (arreglo de 9 posiciones)
@@ -41,36 +16,6 @@ function App() {
   // Estado para que me indique quien es el ganador 
   // null es que no hay ganador, false es que hay empate.
   const [winner, setWinner] = useState(null)
-
-  // Método para saber quien es el ganador ó si hay empate. 
-  const checkWinner = (boardToCheck) => {
-    for (const combo of WINNER_COMBOS) {
-      // Sí hay ganador hay que chequear posición por posición.
-      // Revisamos todas las combinaciones ganadoras para ver si X u O ganó.
-      const [a, b, c] = combo
-      if (
-        boardToCheck[a] &&
-        boardToCheck[a] === boardToCheck[b] &&
-        boardToCheck[a] === boardToCheck[c]
-      ) {
-        return boardToCheck[a]
-      }
-    }
-
-    // Si no hay ganador
-    return null
-  }
-
-  // Chequear si hay empate
-  const checkEndGame = (newBoard) => {
-    // Revisamos si hay un empate
-    // Si no hay espacios vacios en el tablero
-    return newBoard.every((square) => square != null) // 'Sí TODAS (.every) las posiciones del array newBoard son distintas que null significa que ya terminó el juego.'
-
-    // Como sabemos todos los valores del tablero son inicializados en 'null', por ende acorde vayamos jugando los valores van cambiando a 'x' ó a 'o'. 
-    // Cuando esto pase el tablero debe evaluar si hay un ganador o sí hay un empate. 
-  }
-
 
 
   // Función más importante que se encarga de actualizar estados, cambiar estados, ver quien es el ganador.
@@ -88,7 +33,7 @@ function App() {
     setTurn(newTurn)
 
     //Revisar si hay un ganador
-    const newWinner = checkWinner(newBoard)
+    const newWinner = checkWinnerFrom(newBoard)
     if (newWinner) {
       confetti()
       setWinner(newWinner)
@@ -130,27 +75,7 @@ function App() {
           <Square isSelected={turn === TURNS.O}>{TURNS.O}</Square>
         </section>
 
-
-        {/* Mostrar Modal para que aparezca quién ganó. */}
-        {
-          winner != null && (
-            <section className='winner'>
-              <div className='text'>
-                <h2>
-                  {
-                    winner === false ? 'Empate' : 'Ganó'
-                  }
-                </h2>
-                <header className='win'>
-                  {winner && <Square>{winner}</Square>}
-                </header>
-                <footer>
-                  <button onClick={resetGame}>Emprezar de nuevo</button>
-                </footer>
-              </div>
-            </section>
-          )
-        }
+        <WinnerModal resetGame={resetGame} winner={winner} />
       </main>
     </>
   )
