@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import confetti from 'canvas-confetti'
 
 // Constantes para identificar los turnos. 
 const TURNS = {
@@ -89,6 +90,7 @@ function App() {
     //Revisar si hay un ganador
     const newWinner = checkWinner(newBoard)
     if (newWinner) {
+      confetti()
       setWinner(newWinner)
     } else if (checkEndGame(newBoard)) {
       setWinner(false)
