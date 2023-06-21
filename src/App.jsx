@@ -78,14 +78,14 @@ function App() {
     const newWinner = checkWinner(newBoard)
     if (newWinner) {
       setWinner(newWinner)
-      alert(`El ganador es: ${newWinner}`)
-    }
+    } // TODO: Check if game is over
   }
 
   // Lo que se renderiza
   return (
     <>
       <main className='board'>
+        {/* Mostrar el tablero. */}
         <h1>Ta Te Ti</h1>
         <section className='game'>
           {
@@ -99,13 +99,33 @@ function App() {
           }
         </section>
 
-        {/* Mostrar visualmente de quién es el turno.
-              lo hacemos de la siguiente forma: */}
-
+        {/* Mostrar visualmente de quién es el turno. */}
         <section className='turn'>
           <Square isSelected={turn === TURNS.X}>{TURNS.X}</Square>
           <Square isSelected={turn === TURNS.O}>{TURNS.O}</Square>
         </section>
+
+
+        {/* Mostrar Modal para que aparezca quién ganó. */}
+        {
+          winner != null && (
+            <section className='winner'>
+              <div className='text'>
+                <h2>
+                  {
+                    winner === false ? 'Empate' : 'Ganó'
+                  }
+                </h2>
+                <header className='win'>
+                  {winner && <Square>{winner}</Square>}
+                </header>
+                <footer>
+                  <button>Emprezar de nuevo</button>
+                </footer>
+              </div>
+            </section>
+          )
+        }
       </main>
     </>
   )
