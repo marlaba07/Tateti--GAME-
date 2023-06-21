@@ -10,9 +10,19 @@ import { checkWinnerFrom, checkEndGame } from './utils/board'
 
 function App() {
   // Estado para inicializar nuestro tablero (arreglo de 9 posiciones)
-  const [board, setBoard] = useState(Array(9).fill(null))
+  // Agregamos el localStorage para guardar la partida
+  const [board, setBoard] = useState(() => {
+    const boardFromStorage = window.localStorage.getItem('board')
+    return boardFromStorage ? JSON.parse(boardFromStorage) : Array(9).fill(null)
+  })
+
   // Estado para saber de quien es el turno
-  const [turn, setTurn] = useState(TURNS.X)
+  // Agregamos el localStorage para guardar los turnos
+  const [turn, setTurn] = useState(() => {
+    const turnFromStorage = window.localStorage.getItem('turn')
+    return turnFromStorage ?? TURNS.X
+  })
+
   // Estado para que me indique quien es el ganador 
   // null es que no hay ganador, false es que hay empate.
   const [winner, setWinner] = useState(null)
@@ -32,6 +42,10 @@ function App() {
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
 
+    // Guardar partida [local storage]
+    window.localStorage.setItem('board', JSON.stringify(newBoard))
+    window.localStorage.setItem('turn', turn)
+
     //Revisar si hay un ganador
     const newWinner = checkWinnerFrom(newBoard)
     if (newWinner) {
@@ -48,6 +62,10 @@ function App() {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
+
+    // Reseteamos el local storage para que no se guarde información basura
+    window.localStorage.removeItem('board')
+    window.localStorage.removeItem('turn')
   }
 
   // Lo que se renderiza
