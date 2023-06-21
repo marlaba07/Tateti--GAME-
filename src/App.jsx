@@ -60,6 +60,18 @@ function App() {
     return null
   }
 
+  // Chequear si hay empate
+  const checkEndGame = (newBoard) => {
+    // Revisamos si hay un empate
+    // Si no hay espacios vacios en el tablero
+    return newBoard.every((square) => square != null) // 'Sí TODAS (.every) las posiciones del array newBoard son distintas que null significa que ya terminó el juego.'
+
+    // Como sabemos todos los valores del tablero son inicializados en 'null', por ende acorde vayamos jugando los valores van cambiando a 'x' ó a 'o'. 
+    // Cuando esto pase el tablero debe evaluar si hay un ganador o sí hay un empate. 
+  }
+
+
+
   // Función más importante que se encarga de actualizar estados, cambiar estados, ver quien es el ganador.
   const updateBoard = (index) => {
     // Sí en el tablero ya hay algo (x ó o) ó ya hay un gandaor: no reescribas o no actualizarlo cuando ya hay algo. 
@@ -78,7 +90,9 @@ function App() {
     const newWinner = checkWinner(newBoard)
     if (newWinner) {
       setWinner(newWinner)
-    } // TODO: Check if game is over
+    } else if (checkEndGame(newBoard)) {
+      setWinner(false)
+    }
   }
 
   // Para resetear un juego, un formulario, o algo concreto en la página 
@@ -95,12 +109,13 @@ function App() {
       <main className='board'>
         {/* Mostrar el tablero. */}
         <h1>Ta Te Ti</h1>
+        <button onClick={resetGame}>Reiniciar el juego</button>
         <section className='game'>
           {
-            board.map((_, index) => {
+            board.map((square, index) => {
               return (
                 <Square key={index} index={index} updateBoard={updateBoard}>
-                  {board[index]}
+                  {square}
                 </Square>
               )
             })
