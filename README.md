@@ -10,3 +10,5 @@ El "ta-te-ti" es un juego sencillo pero estratégico, ya que los jugadores deben
 - ReactJS: es una biblioteca de JavaScript que se utiliza para construir interfaces de usuario interactivas y reactivas. 
 Se basa en el concepto de componentes reutilizables que representan partes específicas de la interfaz. 
 Utiliza un enfoque basado en componentes y un modelo de programación declarativo, lo que facilita la construcción de aplicaciones web escalables y de alto rendimiento.
+
+Despliegue en: https://tateti-game-peach.vercel.app/
